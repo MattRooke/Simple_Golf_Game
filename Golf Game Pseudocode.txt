@@ -1,188 +1,121 @@
-Golf Game Pseudocode
-
-main
-
-(gameScore) = 0
-
-ask player for name
-	entry = playerName
-
-LOOP until player quits { 	
-	
+main()
+	gameScore = 0
+	numberOfGames = 0
+	numberOfSwings = 0
+	playAgian = Y
 	display 
-		“Welcome to Paradise Palms Golf course (playerName). For instructions please enter (I), to play please enter (P) and to quit please enter (Q). Enjoy your game!	
-
-		| Golf!              |
-		|  Instructions  (I) |
-		|  Play a Hole   (P) |
-		|  Quit Game     (Q) |"
-
-	if "I" entered then
-
-			display
-			“This is a simple golf game in which each hole is 230m game away with par 5. You are able to choose from 3 clubs, the Driver, Iron or Putter. The Driver will hit around 100m, the Iron around 30m and the Putter around 10m. The putter is best used very close to the hole.
-		
-			| Golf!              |
-			|  Instructions  (I) |
-			|  Play a Hole   (P) |
-			|  Quit Game     (Q) |"
-
-	otherwise if "P" entered then
-
-			call playeSwing
-
-	otherwise if "Q" entered then
-
-			display
-			“Farewell and thanks for playing (playerName)”
-			and quit application
-
-	else 
-			display
-
-			"Invalid menu choice entered... please select (I)nstructions, (P)lay or (Q)uit to continue (case sensitive!).
-				
-			| Golf!              |
-			|  Instructions  (I) |
-			|  Play a Hole   (P) |
-			|  Quit Game     (Q) |"
-
-	playerSwing
-
-		(distanceToHole) = 230 
-
-		(numberOfSwings) = 0
-		
+		"What is your name?"
+	get input form user
+	user input = playerName
 		display
-
-		" Welcome to the tee off, this hole is 230m par 5. Please select your club.
-
-		| Swing!             |
-		|  Driver ~ 100m (D) |
-		|  Iron   ~ 30m  (I) |
-		|  Putter ~ 10m  (P) |"
-		
-	LOOP {
-		
-		if (distanceToHole) = 0 then
-			
-			call displayScore
-		
-
-		otherwise if "D,d" entered then
-
-			(numberOfSwings) = (numberOfSwings) + 1
-
-			generate (hitPower) as a random number between 80 and 120
-
-			(shotDistance) = 100*(hitPower/100)
-
-			(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
-
-			display 
-
-			"Your shot went (shotDistance)m
-
-			You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
-			
-			Select Club..."
-			
-			
-		otherwise if "I,i" entered then
-
-			(numberOfSwings) = (numberOfSwings) + 1
-
-			generate (hitPower) as a random number between 80 and 120
-
-			(shotDistance) = 30*(hitPower/100)
-
-			(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
-
-			display 
-
-			"Your shot went (shotDistance)m
-
-			You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
-			
-			Select Club..."
-			
-			
-		otherwise if "P,p" entered then
-
-			if (distanceToHole) < 10 then
-			
-				(numberOfSwings) = (numberOfSwings) + 1
-
-				generate (hitPower) as a random number between 80 and 120
-
-				(shotDistance)must be >= 1) = (distanceToHole)*(hitPower/100)
-
-				(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
-
-				display 
-
-				"Your shot went (shotDistance)m
-
-				You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
-			
-				Select Club..."
+			"Welcome to the golf course (playerName)."
+	while playAgian =! "N"
+		gameMenu(" For instructions please enter (I), to play please enter (P) and to quit please enter (Q). Enjoy your game!",
+					"| Golf!              |    
+					 |  Instructions  (I) |
+					 |  Play a Hole   (P) |
+					 |  Quit Game     (Q) |")
 				
-				
+		swingMenu("Welcome to the tee off, this hole is 230m par 5. Please select your club.",
+					"| Swing!             |
+					 |  Driver ~ 100m (D) |
+					 |  Iron   ~ 30m  (I) |
+					 |  Putter ~ 10m  (P) |" , 230)
+					 
+		score((gameScore), (numberOfSwings), 5)
+		
+	display
+		"Farewell and thanks for playing (playerName)"
+		
+gameMenu(prompt, ui)
+	while user input != "Q"	
+		display prompt		
+		display ui		
+		get user input		
+		if input = "I" then		
+			display 			
+				"This is a simple golf game in which each hole is 230m game away with par 5. You are able to choose from 3 clubs, the Driver, Iron or Putter. The Driver will hit around 100m, the Iron around 30m and the Putter around 10m. The putter is best used very close to the hole."			
+			display ui			
+			get user input			
+		otherwise if input = "P"		
+			continue main() 			
+		else			
+			display 				`
+				"Invalid menu choice entered... please select (I)nstructions, (P)lay or (Q)uit to continue."			
+			display ui			
+			get user input	
+	playAgian = "N"
+	return playAgian
+	
+swingMenu(prompt, ui, distanceToHole) 	
+	numberOfSwings = 0	
+	while distanceToHole !=0	
+		display prompt		
+		display ui		
+		get user input		
+		if input = "D"		
+			swing(100, (numberOfSwings), (distanceToHole), 100)		
+			get user input			
+		otherwise if input = "I"		
+			swing(30, (numberOfSwings), (distanceToHole))		
+			get user input			
+		otherwise if input = "P"			
+			if distanceToHole > 10
+				swing(10, (numberOfSwings), (distanceToHole), 100)
 			else
-			
-				(numberOfSwings) = (numberOfSwings) + 1
-
-				generate (hitPower) as a random number between 80 and 120
-
-				(shotDistance) = 10*(hitPower/100)
-
-				(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
-
-				display 
-
-				"Your shot went (shotDistance)m
-
+				putt((numberOfSwings), (distanceToHole), 100)		
+				get user input				
+		else 
+			(numberOfSwings) = (numberOfSwings) + 1			
+			display			
+				â€œInvalid club choice entered... AIR SWING! :( 
+				Your shot went (shotDistance)m
 				You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
-			
-				Select Club..."
+				Select Club:"				
+				get user input			
+	return (numberOfSwings)
+	continue main()
 				
-		else
-			(numberOfSwings) = (numberOfSwings) + 1
-			
-			display
-			
-			“Invalid club choice entered... AIR SWING! :( 
-			
-			Your shot went (shotDistance)m
-
-			You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
-			
-			Select Club..."
-			
-	} end of loop
-
-	displayScore
-
-		(gameScore) = (gameScore) + (numberOfSwings)
-		
-		if numberOfSwings < 5
-			playerPar = par - numberOfSwings
-			dispaly 
-			"Clunk… After (numberOfSwings) hits your ball is in the hole! Congratulations. You are (playerPar) under par for this hole.')
-
-			
-		otherwise if numberOfSwings = 5:
-			dispaly 
-			"Clunk… After (numberOfSwings) hits your ball is in the hole! Not bad. You are on par for this hole.')
-
-			
-		else
-			playerPar = numberOfSwings - par
-			dispaly
-			"Clunk… After (numberOfSwings) hits your ball is in the hole! Oh dear. You are (playerPar) over par for this hole.')
-		
-		back to top menu or quit game
-		
- } end of main loop
+swing(averageDistance, numberOfSwings, distanceToHole, PERCENT)	
+	(numberOfSwings) = (numberOfSwings) + 1
+	generate (hitPower) as a random number between 80 and 120
+	(shotDistance) = (averageDistance)*((hitPower)/(PERCENT))
+	(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
+	display 
+		"Your shot went (shotDistance)m
+		You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.	
+		Select Club:"	
+	return (numberOfSwings)
+	return (shotDistance)
+	return (distanceToHole)
 	
+putt(numberOfSwings, distanceToHole, PERCENT)	
+	(numberOfSwings) = (numberOfSwings) + 1
+	generate (hitPower) as a random number between 80 and 120
+	(shotDistance)must be >= 1) = (distanceToHole)*(hitPower/PERCENT)
+	(distanceToHole)absolute value) = (distanceToHole) - (shotDistance)
+	display 
+		"Your shot went (shotDistance)m
+		You are (distanceToHole)m from the hole, after (numberOfSwings) swing/s.
+		Select Club:"		
+	return (numberOfSwings)
+	return (shotDistance)
+	return (distanceToHole)
 	
+score(gameScore, numberOfSwings, par)	
+	gameScore = numberOfSwings + gameScore	
+	if numberOfSwings < 5
+		playerPar = par - numberOfSwings
+		display
+		"Clunkâ€¦ After (numberOfSwings) hits your ball is in the hole! Congratulations. You are (playerPar) under par for this hole."
+	otherwise if numberOfSwings == 5
+		display 
+		"Clunkâ€¦ After (numberOfSwings) hits your ball is in the hole! Not bad. You are on par for this hole."
+	else
+		playerPar = numberOfSwings - par
+		display
+		"Clunkâ€¦ After (numberOfSwings) hits your ball is in the hole! Oh dear... You are (playerPar) over par for this hole."			
+	
+	display
+		"your total score is (gameScore)"
+	return gameScore
